@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.WindowedMean;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import net.neru.game.util.Shaders;
@@ -68,16 +69,25 @@ public class ShaderGame extends ApplicationAdapter {
 
     }
 
+    private WindowedMean renderTime = new WindowedMean(10);
+
+    private long dt;
+
     @Override
     public void render() {
+        dt = System.nanoTime();
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        Gdx.graphics.setTitle(String.format("FPS: %d, Render time: %.2fms", Gdx.graphics.getFramesPerSecond(), renderTime.getMean()));
 
         batch.setProjectionMatrix(camera.combined);
 
         batch.begin();
         batch.draw(img, 0, 0);
         batch.end();
+
+        renderTime.addValue((System.nanoTime() - dt) / 1e6f);
     }
 
     @Override

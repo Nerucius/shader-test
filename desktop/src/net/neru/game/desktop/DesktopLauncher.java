@@ -14,6 +14,7 @@ public class DesktopLauncher {
         config.height = 600;
         config.foregroundFPS = 30;
         config.backgroundFPS = -1;
+        config.vSyncEnabled = false;
         config.useGL30 = false;
 
         new LwjglApplication(new ShaderGame(), config);
